@@ -1,5 +1,10 @@
+// https://www.npmjs.com/package/kafka-node
 const kafka = require('kafka-node')
-const client = new kafka.KafkaClient()
+const Config = require('../config.json')
+
+const client = new kafka.KafkaClient({
+    kafkaHost: Config.brokers.join()
+})
 
 /**
  * Producer
@@ -8,7 +13,7 @@ const Producer = kafka.Producer
 const producer = new Producer(client)
 
 payloads = [
-    { topic: 'test', messages: "hello" }
+    { topic: 'test', messages: "hello message from node.js" }
 ]
 
 producer.on('ready', () => {
@@ -16,7 +21,7 @@ producer.on('ready', () => {
         producer.send(payloads, (err, data) => {
             console.log('send', data)
         })
-    }, 2000)
+    }, 3000)
 })
 
 producer.on('error', err => {})
